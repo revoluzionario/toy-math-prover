@@ -15,8 +15,8 @@ theorem_prover/
 ├── environment.py          # ProofEnvironment for rewriting
 ├── infer.py                # Script to run inference on new expressions
 ├── model.py                # TreeLSTM, Symbol Embeddings, Policy-Value net
-├── rewriting_rules.py      # Set of rewriting functions
-├── symbolic_tree.py        # Converts Sympy expressions to a tree
+├── rules.py      # Set of rewriting functions
+├── tree.py        # Converts Sympy expressions to a tree
 ├── train.py                # Training script (REINFORCE with value baseline)
 ├── test_expressions.txt    # Example file with test expressions
 └── README.md               # This file
