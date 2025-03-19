@@ -1,34 +1,90 @@
-# symbolic_tree.py
-import sympy
+"""This file contains the `TreeNode` class and helper functions for converting a Sympy expression into a TreeNode."""
+
+from typing import List
+from sympy import AtomicExpr, sympify
+from torch import Tensor
+
 
 class TreeNode:
-    """
-    Tree node for representing a Sympy expression in a neural network pipeline.
-    Each node has:
-      - expr: the Sympy expression for this node
-      - children: list of child TreeNodes (derived from expr.args)
-      - embedding: a torch Tensor assigned later by an embedding function
-    """
-    __slots__ = ('expr', 'children', 'embedding')
+    """The `TreeNode` class is used for representing a Sympy expression in a neural network pipeline.
 
-    def __init__(self, expr):
-        self.expr = expr
-        self.children = []
-        self.embedding = None
+    Attributes
+    ----------
+    expr : AtomicExpr
+        The Sympy expression for this node.
 
-def sympy_expr_to_tree(expr):
+    children : List[TreeNode]
+        List of child TreeNodes (derived from `expr.args`). By default, it is an empty list.
+
+    embedding : Tensor
+        A torch Tensor assigned later by an embedding function. By default, it is `None`.
+    """
+
+    # Define the attributes of the `TreeNode` class.
+    __slots__ = ("expr", "children", "embedding")
+
+    def __init__(self, expr: AtomicExpr):
+        """Initialize an instance of the `TreeNode` class.
+
+        Parameters
+        ----------
+        expr : AtomicExpr
+            The Sympy expression for this node.
+        """
+        self.expr: AtomicExpr = expr
+        self.children: List[TreeNode] = []
+        self.embedding: Tensor = None
+
+
+def sympy_expr_to_tree(expr: AtomicExpr) -> TreeNode:
     """
     Recursively build a TreeNode hierarchy from a Sympy expression.
+
+    Parameters
+    ----------
+    expr : AtomicExpr
+        A Sympy expression.
+
+    Returns
+    -------
+    node: TreeNode
+        A TreeNode representing the Sympy expression.
     """
-    node = TreeNode(expr)
+    # Initialize the node with the expression.
+    node: TreeNode = TreeNode(expr)
+
+    # Recursively build the children nodes.
     for arg in expr.args:
-        child = sympy_expr_to_tree(arg)
+        child: TreeNode = sympy_expr_to_tree(arg)
         node.children.append(child)
+
+    # Return the node.
     return node
 
-def parse_sympy_expression(expression_str):
+
+def parse_sympy_expression(expression_str: str) -> TreeNode:
     """
-    Convert string -> Sympy expression -> TreeNode.
+    Parse an expression string into a Sympy expression, then convert it into a TreeNode.
+
+    Parameters
+    ----------
+    expression_str : str
+        A string representing a Sympy expression.
+
+    Returns
+    -------
+    node: TreeNode
+        A TreeNode representing the Sympy expression.
+
+    Notes
+    -----
+    Not to mistake `sympify` with `simplify`; both are Sympy functions but serve different purposes.
     """
-    expr = sympy.sympify(expression_str)
-    return sympy_expr_to_tree(expr)
+    # Parse the expression string into a Sympy expression.
+    expr: AtomicExpr = sympify(expression_str)
+
+    # Convert the Sympy expression into a TreeNode.
+    node: TreeNode = sympy_expr_to_tree(expr)
+
+    # Return the TreeNode.
+    return node
