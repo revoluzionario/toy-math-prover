@@ -1,0 +1,14 @@
+[project]
+name = "toy-math-prover"
+version = "0.1.0"
+description = "A simple math theorem prover using policy-value network as main model and TreeLSTM as feature extractor."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=2.2.3",
+    "numpy>=1.13.3",
+    # TODO: Correctly specify torch version for GPU support (CUDA/ROCm) if needed.
+    # Please refer to https://docs.astral.sh/uv/guides/integration/pytorch/.
+    # Currently using torch >= 2.6.0 for CPU only. Remove the TODO if decided to use or not to use GPU.
+    "torch>=2.6.0",
+]
